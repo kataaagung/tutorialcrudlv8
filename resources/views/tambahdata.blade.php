@@ -19,14 +19,14 @@
             <div class="col-8">
                 <div class="card">
                     <div class="card-body">
-                        <form action="/insertdata" method="POST" enctype="mutipart/form-data">
+                        <form action="/insertdata" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
-                              <label class="form-label">Nama Lengkap</label>
-                              <input type="text" name="nama" class="form-control">
+                            <label for="exampleInputEmail1" class="form-label">Nama Lengkap</label>
+                              <input type="text" name="nama" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                             </div>
                             <div class="mb-3">
-                              <label class="form-label">Jenis Kelamin</label>
+                            <label for="exampleInputEmail1" class="form-label">Jenis Kelamin</label>
                                 <select class="form-select" name="jeniskelamin" aria-label="Default select example">
                                     <option selected>Pilih Jenis Kelamin</option>
                                     <option value="cowo">Cowo</option>
@@ -34,11 +34,11 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label">No Telpon</label>
-                              <input type="number" name="notelpon" class="form-control">
+                              <label for="exampleInputEmail1" class="form-label">No Telpon</label>
+                              <input type="number" name="notelpon" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                             </div>
                             <div class="mb-3">
-                              <label  class="form-label">Masukkan foto</label>
+                              <label for="exampleInputEmail1" class="form-label">Masukkan foto</label>
                               <input type="file" name="foto" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>

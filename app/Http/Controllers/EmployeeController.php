@@ -2,13 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Exports\EmployeeExport;
+use App\Imports\EmployeeImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class EmployeeController extends Controller
 {
-    public function index() {
-        $data = Employee::all();
+    public function index(Request $request) {
+        if($request->has('search')){
+            $data = Employee::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        }else{
+            $data = Employee::paginate(5);
+        }
+        
         return view('datapegawai', compact('data'));
     }
 
@@ -31,7 +43,7 @@ class EmployeeController extends Controller
         return view('tampildata', compact('data'));
     }
 
-    public function updatedata(Request $request, $id){
+    public function updatedata(Request $request, $id) {
         $data = Employee::find($id);
         $data->update($request->all());
 
@@ -42,5 +54,26 @@ class EmployeeController extends Controller
         $data = Employee::find($id);
         $data->delete();
         return redirect()->route('pegawai')->with('success', 'Data berhasil didelete');
+    }
+
+    public function exportpdf() {
+        $data = Employee::all();
+        view()->share('data', $data);
+        $pdf = PDF::loadview('datapegawai-pdf');
+
+        return $pdf->download('data.pdf');
+    }
+
+    public function exportexcel() {
+        return Excel::download(new EmployeeExport, 'datapegawai.xlsx');
+    }
+
+    public function importexcel(Request $request) {
+        $data = $request->file('file');
+        $namafile = $data->getClientOriginalName();
+        $data->move('EmployeeData', $namafile);
+
+        Excel::import(new EmployeeImport, \public_path('EmployeeData/'.$namafile));
+        return \redirect()->back();
     }
 }
